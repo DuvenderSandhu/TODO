@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schedule you day with TODO</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <header class="text-gray-600 body-font">
+        <div class="container mx-auto flex flex-wrap p-3 md:p-5 flex-col md:flex-row items-center">
+          <a class="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0">
+           
+            <span class="ml-3 text-xl">TODOS</span>
+          </a>
+          
+        </div>
+      </header>
+    
+      <div class="container m-auto p-2 md:p-4 ">
+        <div class="time text-center md:my-4 text-pink-500 font-bold text-2xl md:text-5xl"></div>
+        <div class="container quote text-center px-4 m-auto w-[3/5] font-bold text-lg md:text-2xl my-4">
+           <span class="font-mono text-pink-500">- Doris Lessing, The Golden Notebook</span> 
+        </div>
+        <div class="lg:w-2/6 md:w-1/2 bg-gray-100 rounded-lg p-4 flex flex-col m-auto w-full mt-2 md:mt-0">
+          <h2 class="text-gray-900 text-lg font-medium title-font mb-5">Todos</h2>
+          <ul class=" m-4 p-2 my-2"></ul>
+          
+          <button class="submit text-white bg-pink-500 border-0 py-2 my-2 px-8 focus:outline-none hover:bg-pink-600 rounded text-lg">Add Todo</button>
+          <button class="clearall text-white bg-red-500 border-0 py-2 px-8 focus:outline-none hover:bg-red-600 rounded text-lg">Clear All</button>
+          <!-- <button class="inline-flex items-center bg-red-500 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0">Clear All</button> -->
+          
+        </div>
+      </div>
+</body>
+<script>
+  let checkboxes= document.querySelectorAll('.input');
+  let indeedCheckboxes= document.querySelectorAll('input[type=checkbox]');
+  let  EditBoxes=function(){
+   checkboxes= document.querySelectorAll('.input');
+    checkboxes.forEach((e,i)=>{
+    if(e.firstElementChild.checked){
+      e.lastElementChild.style.textDecoration="line-through"
+      e.lastElementChild.classList.add("opacity-25")
+      localStorage.removeItem(i)
+    }
+    else{
+      e.lastElementChild.style.textDecoration="none"
+      e.lastElementChild.classList.remove("opacity-25")
+      localStorage.setItem(i,e.innerText)
+    }
+  })
+  }
+function showAlert(){
+  if(document.querySelector('ul').children.length===0){
+  let node=document.createElement("p")
+  node.classList.add('notFoundPara', 'font-bold', 'text-xl', 'text-center', 'text-pink-500', 'w-full')
+  node.innerText="Task not Found"
+  document.querySelector('ul').appendChild(node)
+  }
+  else{
+    if(document.querySelector('.notFoundPara')){
+      document.querySelector('ul').removeChild(document.querySelector('.notFoundPara'))
+    }
+  }
+}
+for (let i = 0; i <100;i++){
+  if(localStorage.key(i)!=null){
+    let key=localStorage.key(i)
+    let element1= document.createElement("div")
+      let element4= document.createElement("input")
+      let element5= document.createElement("p")
+      element1.classList.add("relative","input","mb-4","flex")
+      element4.classList.add("cursor-pointer","mr-3")
+      element4.setAttribute('type',"checkbox")
+      element4.style.accentColor="rgb(161,91,103)"
+      element5.classList.add("font-bold","text-xl")
+      element5.innerText=localStorage.getItem(key)
+      element1.append(element4,element5)
+      document.querySelector('ul').appendChild(element1)
+  }
+  else{
+    break
+  }
+}
+EditBoxes()
+showAlert()
+
+  let submit=document.querySelector('.submit')
+  submit.addEventListener('click', function(){
+    let msg=prompt("What Do you want to add")
+    if(msg!="" && msg!=null){
+      console.log(msg)
+      let element1= document.createElement("div")
+      // let element2= document.createElement("label")
+      let element4= document.createElement("input")
+      let element5= document.createElement("p")
+      element1.classList.add("relative","input","mb-4","flex")
+      // element2.classList.add("leading-7", "text-sm", "text-gray-600")
+      element4.classList.add("cursor-pointer","mr-3")
+      element4.setAttribute('type',"checkbox")
+      element4.style.accentColor="rgb(161,91,103)"
+      element5.classList.add("font-bold","text-xl")
+      element5.innerText=msg
+      // element1.append(element2,element4,element5)
+      element1.append(element4,element5)
+      document.querySelector('ul').appendChild(element1)
+      let len=Array.from(document.querySelector('ul').children)
+      len.forEach((e,i)=>{
+        if(!e.firstChild.checked){
+          localStorage.setItem(i,e.innerText)
+          
+        }
+
+      })
+      indeedCheckboxes= document.querySelectorAll('input[type=checkbox]');
+      checkboxes= document.querySelectorAll('.input');
+      showAlert()
+    }
+
+  })
+
+  document.querySelector('.clearall').addEventListener('click',()=>{
+    document.querySelectorAll('.input').forEach(e=>document.querySelector('ul').removeChild(e))
+    localStorage.clear()
+    showAlert()
+  })
+
+
+  document.querySelector('ul').addEventListener('mouseover',()=>{
+    document.querySelectorAll('input[type=checkbox]').forEach((checkbox,i)=>{
+        checkbox.addEventListener('change', ()=>{
+            EditBoxes()
+            showAlert()
+
+        })
+      })
+
+      
+})
+</script>
+<script src="index.js"></script>
+</html>
